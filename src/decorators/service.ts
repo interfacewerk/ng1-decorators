@@ -17,19 +17,18 @@ export function Service(
 	}) {
 		var serviceFunction = function (...args: any[]) {
 			// console.log("INSTANTIATION", service, args);
-			serviceFunction.$inject.forEach((injected, idx: number) => {
+			serviceFunction.$inject.forEach((injected: string, idx: number) => {
         		target.prototype[target.injections ? target.injections[injected] : injected] = args[idx];
       		});
 			args.unshift(null);
         	return new (Function.prototype.bind.apply(target, args))();
 		}
 		target.service = service;
-		serviceFunction.$inject = target.$inject || [];
-		serviceFunction.$inject = serviceFunction.$inject.concat(params.$inject || []);
 
-		params.moduleDependencies = addMissingDependenciesFrom$Inject(params.moduleDependencies, serviceFunction.$inject);
+		params.moduleDependencies = addMissingDependenciesFrom$Inject(params.moduleDependencies, target.$inject);
+		params.moduleDependencies = addMissingDependenciesFrom$Inject(params.moduleDependencies, params.$inject);
 
-		serviceFunction.$inject = makeInject(serviceFunction.$inject);
+		serviceFunction.$inject = makeInject(target.$inject || []).concat(makeInject(params.$inject || []));
 
 		// so that $injector.instantiate works
 		target.$inject = serviceFunction.$inject;

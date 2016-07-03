@@ -14,7 +14,8 @@ export function Directive(directiveOptions: {
     restrict?: string,
     controllerAs?: string,
 	compile?: ng.IDirectiveCompileFn
-	link?: ng.IDirectiveLinkFn | ng.IDirectivePrePost
+	link?: ng.IDirectiveLinkFn | ng.IDirectivePrePost,
+	controller: Function
 }, 
 	params?: {
 		$inject?: InjectType,
@@ -33,23 +34,26 @@ export function Directive(directiveOptions: {
 		$inject?: string[],
 		injections?: {[injected: string]: string}
 	}) {
-		directiveOptions['controller'] = function (...args: any[]) {
+		directiveOptions.controller = function (...args: any[]) {
 			// here we initialize the instance
 			var instance = Object.create(target.prototype);
 			// on which we pre-fill with angular injections
-			directiveOptions['controller'].$inject.forEach((injected, idx: number) => {
+			directiveOptions.controller.$inject.forEach((injected: string, idx: number) => {
         		instance[target.injections ? target.injections[injected] : injected] = args[idx];
       		});
 			// then we call the constructor of the class
 			target.apply(instance, args);
 			return instance;
 		}
-		directiveOptions['controller'].$inject = target.$inject || [];
-		directiveOptions['controller'].$inject = directiveOptions['controller'].$inject.concat(params.$inject || []);
-		
+
 		params.moduleDependencies = addMissingDependenciesFrom$Inject(
 			params.moduleDependencies, 
-			directiveOptions['controller'].$inject
+			target.$inject
+		);
+
+		params.moduleDependencies = addMissingDependenciesFrom$Inject(
+			params.moduleDependencies, 
+			params.$inject
 		);
 		
 		params.moduleDependencies = addMissingDependenciesFrom$Inject(
@@ -57,10 +61,10 @@ export function Directive(directiveOptions: {
 			directiveOptions.directives || []
 		);
 		
-		directiveOptions['controller'].$inject = makeInject(directiveOptions['controller'].$inject);
+		directiveOptions.controller.$inject = makeInject(target.$inject || []).concat(makeInject(params.$inject || []));
 		
 		var mod = makeAngularModuleIfNecessary(componentSelector, target, params);
-		// console.log(`@Component ${componentSelector} with $inject ${directiveOptions['controller'].$inject}`);
+		// console.log(`@Component ${componentSelector} with $inject ${directiveOptions.controller.$inject}`);
 		mod.directive(componentSelector, () => {
             return directiveOptions
         });	

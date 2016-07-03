@@ -25,8 +25,11 @@ export function Component(
 		templateUrl?: string | Function,
 		template?: string | Function,
         transclude?: boolean | string | {[slot: string]: string},
-        require?: string | string[] | {[controller: string]: string},
-		bindings?: {[binding: string]: string}
+        require?: {[controller: string]: string},
+		bindings?: {[binding: string]: string},
+		controller: Function & {
+			$inject?: string[]
+		}
 	}, 
 	params?: {
 		$inject?: InjectType,
@@ -54,34 +57,37 @@ export function Component(
 				componentOptions.bindings[binding] = target.componentOptions.bindings[binding];
 			}	
 		}
-		componentOptions['controller'] = function (...args: any[]) {
+		componentOptions.controller = function (...args: any[]) {
 			// here we initialize the instance
 			var instance = Object.create(target.prototype);
 			// on which we pre-fill with angular injections
-			componentOptions['controller'].$inject.forEach((injected, idx: number) => {
+			componentOptions.controller.$inject.forEach((injected: string, idx: number) => {
         		instance[target.injections ? target.injections[injected] : injected] = args[idx];
       		});
 			// then we call the constructor of the class
 			target.apply(instance, args);
 			return instance;
 		}
-		componentOptions['controller'].$inject = target.$inject || [];
-		componentOptions['controller'].$inject = componentOptions['controller'].$inject.concat(params.$inject || []);
 		
 		params.moduleDependencies = addMissingDependenciesFrom$Inject(
 			params.moduleDependencies, 
-			componentOptions['controller'].$inject
+			target.$inject
+		);
+
+		params.moduleDependencies = addMissingDependenciesFrom$Inject(
+			params.moduleDependencies, 
+			params.$inject
 		);
 		
 		params.moduleDependencies = addMissingDependenciesFrom$Inject(
 			params.moduleDependencies, 
-			componentOptions.directives || []
+			componentOptions.directives
 		);
 		
-		componentOptions['controller'].$inject = makeInject(componentOptions['controller'].$inject);
+		componentOptions.controller.$inject = makeInject(target.$inject || []).concat(makeInject(params.$inject || []));
 		
 		var mod = makeAngularModuleIfNecessary(componentSelector, target, params);
-		// console.log(`@Component ${componentSelector} with $inject ${componentOptions['controller'].$inject}`);
+		// console.log(`@Component ${componentSelector} with $inject ${componentOptions.controller.$inject}`);
 		mod.component(componentSelector, componentOptions);	
 	};
 }

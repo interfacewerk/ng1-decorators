@@ -29,31 +29,29 @@ export function makeInject($inject: InjectType) {
 
 export function addMissingDependenciesFrom$Inject(moduleDependencies: ModuleDependencies, optionalInjects: InjectType) {
 	var deps = (moduleDependencies || []).slice(0);
-	if (optionalInjects) {
-		optionalInjects.forEach(inj => {
-			var mod = (<ModuleType2>inj).moduleName;
-			if (mod && deps.indexOf(mod) === -1) {
-				deps.push(inj);
-			}
-		})
-	}
+	(optionalInjects || []).forEach(inj => {
+		var mod = (<ModuleType2>inj).moduleName;
+		if (!mod || deps.indexOf(mod) !== -1) return;
+		deps.push(inj);
+	});
 	if (deps.length === 0 && !moduleDependencies) {
 		return moduleDependencies;
 	}
 	return deps;
 }
 
-var PREFIX_REGEXP = /^((?:x|data)[\:\-_])/i;
+let PREFIX_REGEXP = /^((?:x|data)[\:\-_])/i;
 /**
  * Converts all accepted directives format into proper directive name.
  * @param name Name to normalize
  */
-export function directiveNormalize(name) {
+export function directiveNormalize(name: string) {
   return camelCase(name.replace(PREFIX_REGEXP, ''));
 }
-var SPECIAL_CHARS_REGEXP = /([\:\-\_]+(.))/g;
-var MOZ_HACK_REGEXP = /^moz([A-Z])/;
-export function camelCase(name) {
+
+let SPECIAL_CHARS_REGEXP = /([\:\-\_]+(.))/g;
+let MOZ_HACK_REGEXP = /^moz([A-Z])/;
+export function camelCase(name: string) {
   return name.
     replace(SPECIAL_CHARS_REGEXP, function(_, separator, letter, offset) {
       return offset ? letter.toUpperCase() : letter;

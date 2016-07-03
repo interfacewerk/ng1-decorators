@@ -5,7 +5,7 @@ export function Run(
 	run: Function
 ) {
 	run.$inject = makeInject($inject);
-	return function(target) {
+	return function(target: {moduleName: string}) {
 		angular.module(target.moduleName).run(run);	
 	};
 }

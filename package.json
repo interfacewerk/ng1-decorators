@@ -1,0 +1,33 @@
+{
+  "name": "ng1-decorators",
+  "version": "0.0.1",
+  "description": "ng1 decorators to write code in ng2 style",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/interfacewerk/ng1-decorators.git"
+  },
+  "keywords": [
+    "ng1",
+    "angular",
+    "decorators",
+    "upgrade"
+  ],
+  "author": "interfacewerk",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/interfacewerk/ng1-decorators/issues"
+  },
+  "homepage": "https://github.com/interfacewerk/ng1-decorators#readme",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-typescript": "^2.13.6",
+    "gulp-uglify": "^1.5.4",
+    "merge2": "^1.0.2"
+  }
+}

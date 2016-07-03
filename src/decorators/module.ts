@@ -2,7 +2,7 @@ import {ModuleDependencies, transformModuleDependenciesIntoArrayOfString} from '
 
 export function AngularModule(
 	moduleName: string,
-	moduleDependencies?: ModuleDependencies) 
+	moduleDependencies?: ModuleDependencies): ng.IModule
 {
 	if (moduleDependencies) {
 		var deps = transformModuleDependenciesIntoArrayOfString(moduleDependencies) || [];
@@ -35,7 +35,7 @@ export function makeAngularModuleIfNecessary(
 		moduleName?: string,
 		moduleDependencies?: ModuleDependencies
 	}
-) {
+): ng.IModule {
 	if (params.moduleName) {
 		target.moduleName = params.moduleName;
 		return AngularModule(target.moduleName, params.moduleDependencies);

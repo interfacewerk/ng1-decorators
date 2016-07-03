@@ -9,4 +9,3 @@ export * from './decorators/mock';
 export * from './decorators/module';
 export * from './decorators/run';
 export * from './decorators/service';
-export * from './decorators/reloader';

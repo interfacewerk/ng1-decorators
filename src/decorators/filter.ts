@@ -4,7 +4,7 @@ import {makeAngularModuleIfNecessary} from './module';
 export function Filter(
 	filter: string, 
 	params: {
-		filter: (...args) => Function,
+		filter: ((...args: any[]) => Function) & {$inject: string[]},
 		$inject: InjectType,
 		moduleName?: string,
 		moduleDependencies?: ModuleDependencies 
