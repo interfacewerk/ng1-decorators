@@ -1,55 +1,57 @@
-import {InjectType, ModuleDependencies, directiveNormalize, addMissingDependenciesFrom$Inject, makeInject} from './util';
-import {makeAngularModuleIfNecessary} from './module';
+/// <reference path="./util.ts" />
+/// <reference path="./module.ts" />
 
-/**
- * @ngdoc decorator
- * 
- * @description @Component declares an Angular 1 component and a module.
- * 
- * Usage:
- * 
- * @Component({
- *  selector: 'my-component',
- *  directives: […],
- *  templateUrl: '…',
- *  bindings: {
- *   …
- *  }
- * })
- * export class MyComponent {…} 
- */
-export function Component(
-	componentOptions: {
-		selector: string,
-		directives?: InjectType,
-		templateUrl?: string | Function,
-		template?: string | Function,
-        transclude?: boolean | string | {[slot: string]: string},
-        require?: {[controller: string]: string},
-		bindings?: {[binding: string]: string},
-		controller: Function & {
-			$inject?: string[]
-		}
-	}, 
-	params?: {
-		$inject?: InjectType,
-		moduleName?: string,
-		moduleDependencies?: ModuleDependencies,
-	}
-) {
-	var componentSelector = directiveNormalize(componentOptions.selector);	
-	params = params || {};
+module ng1decorators {
 	
-	return function (target: Function & {
-		componentOptions?: {
-			bindings?: {[binding: string]: string}
-		},
-		moduleName?: string,
-		$inject?: string[],
-		injections?: {[injected: string]: string}
-	}) {
-		componentOptions.bindings = componentOptions.bindings || {};
-		if (target.componentOptions && target.componentOptions.bindings) {
+	/**
+	 * @ngdoc decorator
+	 * 
+	 * @description @Component declares an Angular 1 component and a module.
+	 * 
+	 * Usage:
+	 * 
+	 * @Component({
+	 *  selector: 'my-component',
+	 *  directives: […],
+	 *  templateUrl: '…',
+	 *  bindings: {
+	 *   …
+	 *  }
+	 * })
+	 * export class MyComponent {…} 
+	 */
+	export function Component(
+		componentOptions: {
+			selector: string,
+			directives?: InjectType,
+			templateUrl?: string | Function,
+			template?: string | Function,
+			transclude?: boolean | string | {[slot: string]: string},
+			require?: {[controller: string]: string},
+			bindings?: {[binding: string]: string},
+			controller: Function & {
+				$inject?: string[]
+			}
+		}, 
+		params?: {
+			$inject?: InjectType,
+			moduleName?: string,
+			moduleDependencies?: ModuleDependencies,
+		}
+	) {
+		var componentSelector = directiveNormalize(componentOptions.selector);	
+		params = params || {};
+		
+		return function (target: Function & {
+			componentOptions?: {
+				bindings?: {[binding: string]: string}
+			},
+			moduleName?: string,
+			$inject?: string[],
+			injections?: {[injected: string]: string}
+		}) {
+			componentOptions.bindings = componentOptions.bindings || {};
+			if (target.componentOptions && target.componentOptions.bindings) {
 			for(var binding in target.componentOptions.bindings) {
 				if (componentOptions.bindings[binding]) {
 					throw `Binding ${binding} already defined for ${componentOptions.selector}`;
@@ -90,4 +92,5 @@ export function Component(
 		// console.log(`@Component ${componentSelector} with $inject ${componentOptions.controller.$inject}`);
 		mod.component(componentSelector, componentOptions);	
 	};
+}
 }
