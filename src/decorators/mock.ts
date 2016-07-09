@@ -1,10 +1,7 @@
-/// <reference path="./util.ts" />
+import {ModuleDependencies, transformModuleDependenciesIntoArrayOfString} from './util';
 
-module ng1decorators {
-
-	export function MockModule(...args: ModuleDependencies) {
-		return angular.mock.module.apply(angular.mock, 
-			transformModuleDependenciesIntoArrayOfString(args)
-		);
-	}
+export function MockModule(...args: ModuleDependencies) {
+	return angular.mock.module.apply(angular.mock, 
+		transformModuleDependenciesIntoArrayOfString(args)
+	);
 }

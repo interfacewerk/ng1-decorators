@@ -1,10 +1,9 @@
-declare module "decorators" {
-    export module ng1decorators {
-    }
+declare module "decorators/property" {
+    export function Property(target: Object, name: string): void;
 }
-declare module ng1decorators {
-    type EventEmitter<T> = (params: T) => any;
-    function EventBinding(binding?: string): (target: Function & {
+declare module "decorators/binding" {
+    export type EventEmitter<T> = (params: T) => any;
+    export function EventBinding(binding?: string): (target: Function & {
         constructor: Function & {
             componentOptions?: {
                 bindings?: {
@@ -13,8 +12,8 @@ declare module ng1decorators {
             };
         };
     }, name: string) => void;
-    var Output: typeof EventBinding;
-    function InputString(binding?: string): (target: Function & {
+    export var Output: typeof EventBinding;
+    export function InputString(binding?: string): (target: Function & {
         constructor: Function & {
             componentOptions?: {
                 bindings?: {
@@ -23,7 +22,7 @@ declare module ng1decorators {
             };
         };
     }, name: string) => void;
-    function Input(binding?: string): (target: Function & {
+    export function Input(binding?: string): (target: Function & {
         constructor: Function & {
             componentOptions?: {
                 bindings?: {
@@ -33,38 +32,40 @@ declare module ng1decorators {
         };
     }, name: string) => void;
 }
-declare module ng1decorators {
-    type ModuleType2 = {
+declare module "decorators/util" {
+    export type ModuleType2 = {
         moduleName?: string;
     };
-    type ServiceType2 = {
+    export type ServiceType2 = {
         service?: string;
     };
-    type InjectType = Array<string | {}>;
-    type ModuleDependencies = Array<ModuleDependency>;
-    type ModuleDependency = string | ModuleType2;
-    function transformModuleDependenciesIntoArrayOfString(deps: ModuleDependencies): string[];
-    function makeInject($inject: InjectType): string[];
-    function addMissingDependenciesFrom$Inject(moduleDependencies: ModuleDependencies, optionalInjects: InjectType): (string | {
+    export type InjectType = Array<string | {}>;
+    export type ModuleDependencies = Array<ModuleDependency>;
+    export type ModuleDependency = string | ModuleType2;
+    export function transformModuleDependenciesIntoArrayOfString(deps: ModuleDependencies): string[];
+    export function makeInject($inject: InjectType): string[];
+    export function addMissingDependenciesFrom$Inject(moduleDependencies: ModuleDependencies, optionalInjects: InjectType): (string | {
         moduleName?: string;
     })[];
-    function directiveNormalize(name: string): string;
-    function camelCase(name: string): string;
+    export function directiveNormalize(name: string): string;
+    export function camelCase(name: string): string;
 }
-declare module ng1decorators {
-    function AngularModule(moduleName: string, moduleDependencies?: ModuleDependencies): ng.IModule;
-    function Module(moduleName: string, moduleDependencies?: ModuleDependencies): (target: Function & {
+declare module "decorators/module" {
+    import { ModuleDependencies } from "decorators/util";
+    export function AngularModule(moduleName: string, moduleDependencies?: ModuleDependencies): ng.IModule;
+    export function Module(moduleName: string, moduleDependencies?: ModuleDependencies): (target: Function & {
         moduleName?: string;
     }) => void;
-    function makeAngularModuleIfNecessary(moduleNameIfNotProvided: string, target: Function & {
+    export function makeAngularModuleIfNecessary(moduleNameIfNotProvided: string, target: Function & {
         moduleName?: string;
     }, params: {
         moduleName?: string;
         moduleDependencies?: ModuleDependencies;
     }): ng.IModule;
 }
-declare module ng1decorators {
-    function Component(componentOptions: {
+declare module "decorators/component" {
+    import { InjectType, ModuleDependencies } from "decorators/util";
+    export function Component(componentOptions: {
         selector: string;
         directives?: InjectType;
         templateUrl?: string | Function;
@@ -98,15 +99,17 @@ declare module ng1decorators {
         };
     }) => void;
 }
-declare module ng1decorators {
-    function Config($inject: InjectType, config: Function & {
+declare module "decorators/config" {
+    import { InjectType } from "decorators/util";
+    export function Config($inject: InjectType, config: Function & {
         $inject: string[];
     }): (target: {
         moduleName: string;
     }) => void;
 }
-declare module ng1decorators {
-    function Directive(directiveOptions: {
+declare module "decorators/directive" {
+    import { InjectType, ModuleDependencies } from "decorators/util";
+    export function Directive(directiveOptions: {
         selector: string;
         directives?: InjectType;
         scope?: boolean | Object;
@@ -142,8 +145,9 @@ declare module ng1decorators {
         };
     }) => void;
 }
-declare module ng1decorators {
-    function Filter(filter: string, params: {
+declare module "decorators/filter" {
+    import { InjectType, ModuleDependencies } from "decorators/util";
+    export function Filter(filter: string, params: {
         filter: ((...args: any[]) => Function) & {
             $inject: string[];
         };
@@ -156,8 +160,8 @@ declare module ng1decorators {
         $inject?: string[];
     }) => void;
 }
-declare module ng1decorators {
-    function Inject(injected?: string): (targetClass: {
+declare module "decorators/inject" {
+    export function Inject(injected?: string): (targetClass: {
         constructor: Function & {
             injections?: {
                 [injectedString: string]: string;
@@ -166,19 +170,19 @@ declare module ng1decorators {
         };
     }, propertyName: string) => void;
 }
-declare module ng1decorators {
-    function MockModule(...args: ModuleDependencies): any;
+declare module "decorators/mock" {
+    import { ModuleDependencies } from "decorators/util";
+    export function MockModule(...args: ModuleDependencies): any;
 }
-declare module ng1decorators {
-    function Property(target: Object, name: string): void;
-}
-declare module ng1decorators {
-    function Run($inject: InjectType, run: Function): (target: {
+declare module "decorators/run" {
+    import { InjectType } from "decorators/util";
+    export function Run($inject: InjectType, run: Function): (target: {
         moduleName: string;
     }) => void;
 }
-declare module ng1decorators {
-    function Service(service: string, params?: {
+declare module "decorators/service" {
+    import { InjectType, ModuleDependencies } from "decorators/util";
+    export function Service(service: string, params?: {
         $inject?: InjectType;
         moduleName?: string;
         moduleDependencies?: ModuleDependencies;
@@ -190,4 +194,17 @@ declare module ng1decorators {
             [injected: string]: string;
         };
     }) => void;
+}
+declare module "decorators" {
+    export * from "decorators/property";
+    export * from "decorators/binding";
+    export * from "decorators/component";
+    export * from "decorators/config";
+    export * from "decorators/directive";
+    export * from "decorators/filter";
+    export * from "decorators/inject";
+    export * from "decorators/mock";
+    export * from "decorators/module";
+    export * from "decorators/run";
+    export * from "decorators/service";
 }

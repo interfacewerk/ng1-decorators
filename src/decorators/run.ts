@@ -1,14 +1,11 @@
-/// <reference path="./util.ts" />
+import {InjectType, makeInject} from './util';
 
-module ng1decorators {
-
-	export function Run(
-		$inject: InjectType,
-		run: Function
-	) {
-		run.$inject = makeInject($inject);
-		return function(target: {moduleName: string}) {
-			angular.module(target.moduleName).run(run);	
-		};
-	}
+export function Run(
+	$inject: InjectType,
+	run: Function
+) {
+	run.$inject = makeInject($inject);
+	return function(target: {moduleName: string}) {
+		angular.module(target.moduleName).run(run);	
+	};
 }
