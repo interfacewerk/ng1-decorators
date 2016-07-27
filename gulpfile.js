@@ -1,13 +1,7 @@
 var gulp = require('gulp');
-var ts = require('gulp-typescript');
-var merge = require('merge2');  
 var uglify = require('gulp-uglify');
 var rename = require('gulp-rename');
-var concat = require('gulp-concat');
-var jspm = require('gulp-jspm-build');
 var webpack = require('gulp-webpack');
-
-var tsProject = ts.createProject('tsconfig.json');
 
 gulp.task('webpack', [], function() {
     return gulp.src('src/decorators.ts')
