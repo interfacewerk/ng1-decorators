@@ -1,11 +1,11 @@
-export * from './decorators/property';
-export * from './decorators/binding';
-export * from './decorators/component';
-export * from './decorators/config';
-export * from './decorators/directive';
-export * from './decorators/filter';
-export * from './decorators/inject';
-export * from './decorators/mock';
-export * from './decorators/module';
-export * from './decorators/run';
-export * from './decorators/service';
+export {Component} from './decorators/component';
+export {Input, InputString, Output, EventBinding, EventEmitter} from './decorators/binding';
+export {Config} from './decorators/config';
+export {Directive} from './decorators/directive';
+export {Filter} from './decorators/filter';
+export {Inject} from './decorators/inject';
+export {MockModule} from './decorators/mock';
+export {Module, AngularModule} from './decorators/module';
+export {Run} from './decorators/run';
+export {Service} from './decorators/service';
+

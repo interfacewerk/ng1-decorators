@@ -1,15 +1,12 @@
 {
-    "compilerOptions": {
-        "module": "system",
-        "noImplicitAny": true,
-        "removeComments": true,
-        "preserveConstEnums": true,
-        "outFile": "ng1-decorators.js",
-        "sourceMap": true,
-        "declaration": true
-    },
-    "exclude": [
-        "node_modules",
-        "dist"
-    ]
+  "compilerOptions": {
+    "target": "es5",
+    "sourceMap": true,
+    "declaration": true
+  },
+  "exclude": [
+    "node_modules",
+    "test",
+    "dist"
+  ]
 }
