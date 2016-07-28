@@ -27,7 +27,7 @@ export function Component(
 		transclude?: boolean | string | {[slot: string]: string},
 		require?: {[controller: string]: string},
 		bindings?: {[binding: string]: string},
-		controller: Function & {
+		controller?: Function & {
 			$inject?: string[]
 		}
 	}, 
