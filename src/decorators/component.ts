@@ -24,8 +24,8 @@ export function Component(
 		directives?: InjectType,
 		templateUrl?: string | Function,
 		template?: string | Function,
-        transclude?: boolean | string | {[slot: string]: string},
-        require?: {[controller: string]: string},
+		transclude?: boolean | string | {[slot: string]: string},
+		require?: {[controller: string]: string},
 		bindings?: {[binding: string]: string},
 		controller: Function & {
 			$inject?: string[]
@@ -62,8 +62,8 @@ export function Component(
 			var instance = Object.create(target.prototype);
 			// on which we pre-fill with angular injections
 			componentOptions.controller.$inject.forEach((injected: string, idx: number) => {
-        		instance[target.injections ? target.injections[injected] : injected] = args[idx];
-      		});
+				instance[target.injections ? target.injections[injected] : injected] = args[idx];
+			});
 			// then we call the constructor of the class
 			target.apply(instance, args);
 			return instance;
