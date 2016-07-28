@@ -1,11 +1,11 @@
 import {makeInject} from './util';
 
-export function Inject(injected?: string) {
+export function Inject(injected?: string | Object) {
 	return function (
 		targetClass: {
 			constructor: Function & {
 				injections?: {[injectedString: string] : string},
-				$inject: string[]
+				$inject?: (string | Object)[]
 			}, 
 		}, 
 		propertyName: string
